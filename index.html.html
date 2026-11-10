@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniConvert - KG to LBS Unit Converter</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #09090B;
+      color: #FAFAFA;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none !important;
+      margin: 0 !important;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield !important;
+    }
+
+    .capsule-input::placeholder {
+      color: #71717A !important;
+      font-size: 16px !important;
+      font-weight: 400 !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+
+    .theme-stepper-btn {
+      width: 28px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #18181B;
+      color: #A1A1AA;
+      border: none;
+      cursor: pointer;
+      font-size: 10px;
+      transition: all 0.2s;
+      user-select: none;
+      padding: 0;
+    }
+    .theme-stepper-btn:hover {
+      background-color: #27272A;
+      color: #34D399;
+    }
+
+    .converter-card {
+      width: 100%;
+      max-width: 680px;
+      background-color: #121215;
+      border: 1px solid #27272A;
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+    }
+
+    .preset-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: #18181B;
+      border: 1px solid #27272A;
+      color: #D4D4D8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .preset-btn:hover {
+      border-color: #3F3F46;
+      background-color: #27272A;
+    }
+
+    .action-btn-clear {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid #27272A;
+      background: transparent;
+      color: #A1A1AA;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn-clear:hover {
+      background: #18181B;
+      color: #FAFAFA;
+      border-color: #3F3F46;
+    }
+
+    .action-btn-copy {
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      background-color: #10B981;
+      color: #042F2E;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .action-btn-copy:hover {
+      background-color: #34D399;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="converter-card">
+    <!-- Header -->
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 20px; font-weight: 700; color: #FAFAFA; margin-bottom: 4px;">Precision Mass Converter</h1>
+      <p style="font-size: 13px; color: #71717A;">Bidirectional, zero-latency unit converter for Kilograms and Pounds.</p>
+    </div>
+
+    <!-- Dual Inputs Container -->
+    <div style="background-color: #18181B; border: 1px solid #27272A; border-radius: 14px; padding: 14px; margin-bottom: 20px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px;">
+        
+        <!-- KG Capsule -->
+        <div style="flex: 1; min-width: 220px; background-color: #121215; border: 1px solid #27272A; border-radius: 10px; padding: 12px 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 12px; font-weight: 600; color: #A1A1AA;">Weight in Kilograms</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #34D399; background-color: #18181B; padding: 2px 8px; border-radius: 4px; border: 1px solid #27272A;">
+              KG
+            </span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input 
+              type="number" 
+              id="capsuleKgInput" 
+              class="capsule-input"
+              value="" 
+              step="any"
+              placeholder="0.00" 
+              style="width: 100%; background: transparent; border: none; outline: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; color: #FAFAFA; padding: 4px 0;" 
+              oninput="handleKgInput(this.value);" 
+            />
+            <div style="display: flex; flex-direction: column; border: 1px solid #27272A; border-radius: 6px; overflow: hidden; background-color: #18181B; flex-shrink: 0;">
+              <button type="button" class="theme-stepper-btn" onclick="stepKg(1);" title="Increase KG" style="border-bottom: 1px solid #27272A;">▲</button>
+              <button type="button" class="theme-stepper-btn" onclick="stepKg(-1);" title="Decrease KG">▼</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center Divider Icon -->
+        <div style="width: 38px; height: 38px; border-radius: 50%; background-color: #121215; border: 1px solid #27272A; display: flex; align-items: center; justify-content: center; margin: 0 auto; shrink: 0; pointer-events: none; user-select: none;">
+          <span style="font-size: 15px; font-weight: 700; color: #34D399;">⇄</span>
+        </div>
+
+        <!-- LBS Capsule -->
+        <div style="flex: 1; min-width: 220px; background-color: #121215; border: 1px solid #27272A; border-radius: 10px; padding: 12px 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 12px; font-weight: 600; color: #A1A1AA;">Weight in Pounds</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #E4E4E7; background-color: #18181B; padding: 2px 8px; border-radius: 4px; border: 1px solid #27272A;">
+              LBS
+            </span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input 
+              type="number" 
+              id="capsuleLbsInput" 
+              class="capsule-input"
+              value="" 
+              step="any"
+              placeholder="0.00" 
+              style="width: 100%; background: transparent; border: none; outline: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 24px; color: #34D399; padding: 4px 0;" 
+              oninput="handleLbsInput(this.value);" 
+            />
+            <div style="display: flex; flex-direction: column; border: 1px solid #27272A; border-radius: 6px; overflow: hidden; background-color: #18181B; flex-shrink: 0;">
+              <button type="button" class="theme-stepper-btn" onclick="stepLbs(1);" title="Increase LBS" style="border-bottom: 1px solid #27272A;">▲</button>
+              <button type="button" class="theme-stepper-btn" onclick="stepLbs(-1);" title="Decrease LBS">▼</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Quick Presets -->
+    <div style="margin-bottom: 24px;">
+      <div style="font-size: 12px; color: #71717A; margin-bottom: 10px; font-weight: 500;">Quick Presets:</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="presetContainer">
+        <button type="button" class="preset-btn" onclick="setPresetValue(2)">2 kg</button>
+        <button type="button" class="preset-btn" onclick="setPresetValue(5)">5 kg</button>
+        <button type="button" class="preset-btn" onclick="setPresetValue(10)">10 kg</button>
+        <button type="button" class="preset-btn" onclick="setPresetValue(25)">25 kg</button>
+        <button type="button" class="preset-btn" onclick="setPresetValue(50)">50 kg</button>
+        <button type="button" class="preset-btn" onclick="setPresetValue(75)">75 kg</button>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding-top: 18px; border-top: 1px solid #27272A;">
+      <button type="button" class="action-btn-clear" onclick="clearAllFields();">Clear</button>
+      <button type="button" class="action-btn-copy" id="capsuleCopyBtn" onclick="copyConversionResult();">
+        <span>Copy Result</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const RATIO = 2.2046226218;
+
+    function handleKgInput(val) {
+      const lbsField = document.getElementById('capsuleLbsInput');
+      if (val === '' || isNaN(val)) {
+        lbsField.value = '';
+        updatePresetHighlight(-1);
+        return;
+      }
+      const num = parseFloat(val);
+      lbsField.value = num >= 0 ? (num * RATIO).toFixed(4) : '0.0000';
+      updatePresetHighlight(num);
+    }
+
+    function handleLbsInput(val) {
+      const kgField = document.getElementById('capsuleKgInput');
+      if (val === '' || isNaN(val)) {
+        kgField.value = '';
+        updatePresetHighlight(-1);
+        return;
+      }
+      const num = parseFloat(val);
+      kgField.value = num >= 0 ? (num / RATIO).toFixed(4) : '0.0000';
+      updatePresetHighlight(parseFloat(kgField.value));
+    }
+
+    function stepKg(delta) {
+      const input = document.getElementById('capsuleKgInput');
+      const current = parseFloat(input.value) || 0;
+      const nextVal = Math.max(0, current + delta);
+      input.value = nextVal;
+      handleKgInput(nextVal);
+    }
+
+    function stepLbs(delta) {
+      const input = document.getElementById('capsuleLbsInput');
+      const current = parseFloat(input.value) || 0;
+      const nextVal = Math.max(0, current + delta);
+      input.value = nextVal;
+      handleLbsInput(nextVal);
+    }
+
+    function setPresetValue(kgVal) {
+      document.getElementById('capsuleKgInput').value = kgVal;
+      handleKgInput(kgVal);
+    }
+
+    function updatePresetHighlight(currentKg) {
+      const buttons = document.querySelectorAll('#presetContainer button');
+      buttons.forEach(btn => {
+        const val = parseFloat(btn.innerText);
+        if (val === currentKg) {
+          btn.style.backgroundColor = '#10B981';
+          btn.style.color = '#042F2E';
+          btn.style.fontWeight = '700';
+          btn.style.borderColor = '#10B981';
+        } else {
+          btn.style.backgroundColor = '#18181B';
+          btn.style.color = '#D4D4D8';
+          btn.style.fontWeight = '500';
+          btn.style.borderColor = '#27272A';
+        }
+      });
+    }
+
+    function clearAllFields() {
+      document.getElementById('capsuleKgInput').value = '';
+      document.getElementById('capsuleLbsInput').value = '';
+      updatePresetHighlight(-1);
+    }
+
+    function copyConversionResult() {
+      const kg = document.getElementById('capsuleKgInput').value;
+      const lbs = document.getElementById('capsuleLbsInput').value;
+      if (!kg && !lbs) return;
+
+      const text = (kg || '0') + ' kg = ' + (lbs || '0') + ' lbs';
+      navigator.clipboard.writeText(text);
+
+      const btn = document.getElementById('capsuleCopyBtn');
+      btn.innerHTML = '<span>✓ Copied!</span>';
+      setTimeout(() => {
+        btn.innerHTML = '<span>Copy Result</span>';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
